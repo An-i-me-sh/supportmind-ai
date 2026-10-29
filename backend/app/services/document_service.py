@@ -83,6 +83,9 @@ class DocumentService:
                     logger.error(f"Document {doc_id_str} not found in database.")
                     return
 
+                # Clean existing chunks if re-processing
+                db.query(DocumentChunk).filter(DocumentChunk.document_id == doc_id_str).delete()
+
                 for idx, chunk_content in enumerate(chunks):
                     try:
                         embedding = AIService.get_embedding(chunk_content)

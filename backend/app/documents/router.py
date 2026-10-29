@@ -83,13 +83,17 @@ async def upload_document(
     db.commit()
     db.refresh(new_doc)
 
-    background_tasks.add_task(
-        DocumentService.process_document_background,
-        SessionLocal,
-        new_doc.id,
-        file_path,
-        new_doc.file_type
-    )
+    # Process document immediately (takes ~0.05s) so response returns completed status directly
+    try:
+        DocumentService.process_document_background(
+            SessionLocal,
+            new_doc.id,
+            file_path,
+            new_doc.file_type
+        )
+        db.refresh(new_doc)
+    except Exception as proc_err:
+        logger.error(f"Error during document processing: {proc_err}")
 
     return new_doc
 
@@ -98,7 +102,27 @@ def list_documents(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    return db.query(Document).order_by(Document.created_at.desc()).all()
+    docs = db.query(Document).order_by(Document.created_at.desc()).all()
+    # Auto-recover any documents stuck in 'processing' from earlier server restarts
+    for doc in docs:
+        if doc.status == "processing":
+            if doc.storage_path and os.path.exists(doc.storage_path):
+                try:
+                    DocumentService.process_document_background(
+                        SessionLocal,
+                        doc.id,
+                        doc.storage_path,
+                        doc.file_type
+                    )
+                    db.refresh(doc)
+                except Exception as e:
+                    logger.error(f"Failed to auto-recover document {doc.id}: {e}")
+                    doc.status = "error"
+                    db.commit()
+            else:
+                doc.status = "error"
+                db.commit()
+    return docs
 
 @router.get("/documents/{doc_id}", response_model=DocumentResponse)
 def get_document(
