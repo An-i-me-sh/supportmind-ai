@@ -104,15 +104,13 @@ async def health_check(db: Session = Depends(get_db)):
         logger.error(f"Health check DB failure: {e}")
         db_status = "unhealthy"
 
-    ai_status = await AIService.verify_health()
+    groq_configured = bool(os.getenv("GROQ_API_KEY"))
 
-    overall_status = "healthy" if db_status == "healthy" and ai_status["status"] == "healthy" else "degraded"
-    
     return {
-        "status": overall_status,
+        "status": "healthy" if db_status == "healthy" else "degraded",
         "database": db_status,
         "database_engine": engine.dialect.name,
-        "ai_service": ai_status
+        "groq_configured": groq_configured
     }
 
 # Serve static frontend build if present for a single unified URL

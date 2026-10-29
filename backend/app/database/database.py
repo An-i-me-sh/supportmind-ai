@@ -13,7 +13,9 @@ RAW_DB_URL = os.getenv("DATABASE_URL", "sqlite:///./supportmind.db")
 
 # Standardize URL
 if RAW_DB_URL.startswith("postgres://"):
-    RAW_DB_URL = RAW_DB_URL.replace("postgres://", "postgresql://", 1)
+    RAW_DB_URL = RAW_DB_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif RAW_DB_URL.startswith("postgresql://") and not RAW_DB_URL.startswith("postgresql+"):
+    RAW_DB_URL = RAW_DB_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
 DATABASE_URL = RAW_DB_URL
 
