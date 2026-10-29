@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | SupportMind AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;500&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#101b30",
+                    "surface-container-highest": "#d7e2ff",
+                    "inverse-primary": "#59dda9",
+                    "inverse-on-surface": "#edf0ff",
+                    "on-surface-variant": "#3d4a42",
+                    "secondary-fixed": "#b2ebff",
+                    "on-tertiary-fixed": "#052100",
+                    "surface-bright": "#f9f9ff",
+                    "outline": "#6d7a72",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#18697e",
+                    "primary-container": "#00a878",
+                    "outline-variant": "#bccac0",
+                    "on-primary-fixed-variant": "#005138",
+                    "tertiary": "#206d00",
+                    "primary": "#006c4c",
+                    "on-background": "#101b30",
+                    "tertiary-container": "#36aa00",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#78fac3",
+                    "primary-fixed-dim": "#59dda9",
+                    "on-primary-fixed": "#002114",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#263046",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d7e2ff",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed": "#84fe58",
+                    "secondary-fixed-dim": "#8bd1e8",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f9f9ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f1f3ff",
+                    "surface-tint": "#006c4c",
+                    "on-tertiary-fixed-variant": "#165200",
+                    "on-tertiary-container": "#0b3500",
+                    "tertiary-fixed-dim": "#69e03e",
+                    "surface-container": "#e8edff",
+                    "on-secondary-fixed": "#001f27",
+                    "secondary-container": "#a1e7ff",
+                    "surface-container-high": "#e0e8ff",
+                    "on-primary-container": "#003422",
+                    "secondary": "#13677b",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "md": "16px",
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "margin-desktop": "40px",
+                    "xl": "32px",
+                    "3xl": "64px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Geist"],
+                    "body-sm": ["Inter"],
+                    "code": ["Geist"],
+                    "display": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Geist"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "code": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass-panel {
+            background: rgba(16, 27, 48, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-halo:focus {
+            box-shadow: 0 0 0 3px rgba(0, 108, 76, 0.15);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation / Theme Toggle -->
+<header class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-headline-md font-bold text-primary">SupportMind AI</span>
+</div>
+<div class="flex items-center gap-md">
+<button aria-label="Toggle Theme" class="w-12 h-6 rounded-full bg-surface-container-highest relative flex items-center px-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]" id="theme-toggle">
+<div class="w-4 h-4 bg-primary rounded-full flex items-center justify-center transition-all duration-500 transform" id="theme-thumb">
+<span class="material-symbols-outlined text-[10px] text-on-primary" id="theme-icon">light_mode</span>
+</div>
+</button>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row h-screen pt-16 md:pt-0">
+<!-- Left Side: Abstract AI Illustration (Bento/Hero Pattern) -->
+<section class="hidden md:flex md:w-1/2 lg:w-3/5 bg-on-surface relative overflow-hidden flex-col justify-center px-3xl">
+<!-- Animated Background Shader Component -->
+
+<div class="relative z-10 max-w-lg">
+<div class="mb-lg">
+<span class="px-sm py-xs bg-primary/20 text-primary-fixed font-label-sm text-label-sm rounded-full inline-block mb-md">ENTERPRISE INTELLIGENCE</span>
+<h1 class="font-display text-display text-surface-container-lowest leading-tight mb-md">
+                        The future of <span class="text-primary-fixed">enterprise support</span> is here.
+                    </h1>
+<p class="font-body-lg text-body-lg text-surface-variant/80">
+                        Harness the power of autonomous AI models to resolve tickets, manage knowledge bases, and drive customer satisfaction at scale.
+                    </p>
+</div>
+<!-- Featured Card (Asymmetric Layout) -->
+<div class="glass-panel p-lg rounded-xl flex items-center gap-lg animate-float">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">smart_toy</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-surface-container-lowest">Neural Processing Active</div>
+<div class="text-primary-fixed font-body-sm text-body-sm">99.8% Accuracy Rating</div>
+</div>
+</div>
+</div>
+<!-- Absolute decorative elements -->
+<div class="absolute bottom-10 right-10 w-32 h-32 border border-primary/20 rounded-full"></div>
+<div class="absolute -bottom-20 -left-20 w-64 h-64 bg-primary/10 blur-3xl rounded-full"></div>
+</section>
+<!-- Right Side: Premium Login Form -->
+<section class="flex-grow md:w-1/2 lg:w-2/5 flex items-center justify-center px-margin-mobile md:px-3xl py-2xl bg-surface">
+<div class="w-full max-w-[400px]">
+<div class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Welcome back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Access your AI dashboard and tickets.</p>
+</div>
+<!-- Google Sign-In (Social Placeholder) -->
+<button class="w-full h-12 flex items-center justify-center gap-md border border-outline-variant hover:bg-surface-container-low transition-all duration-200 rounded-lg group mb-xl">
+<div class="w-5 h-5 overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A clean, high-fidelity vector representation of the Google brand logo on a white background, minimalist enterprise style for professional UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6_ljs6xu_ohCMoKYUJsDLDXh9U-CeMPGqWkVungPaaXQ_NB5sAET3E03muPGMsDD_uOgzMQ6VF4VSVWlFUFpHT-mm8YQpyh9jKryDK2Q72Cnh-NGcEjpk0z6VaPN_kGTgkmOl65aRJUi9dQhq2gFULflAQUJs_cSHOxY-YXnQFUrqcvvm-66jQc-LZHo-I47PJbNuK204k-8ZyGLWsmI0wqfJU0sra9t8zDEIKFSDIZV5J1FJDHBs"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Continue with Google</span>
+</button>
+<div class="relative flex items-center mb-xl">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="px-md font-label-sm text-label-sm text-outline">OR CONTINUE WITH EMAIL</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<form class="space-y-lg" id="login-form">
+<!-- Email Input -->
+<div class="space-y-xs group">
+<label class="font-label-md text-label-md text-on-surface-variant group-focus-within:text-primary transition-colors" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">mail</span>
+<input class="w-full h-12 pl-11 pr-md bg-transparent border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary input-halo transition-all outline-none" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+<p class="hidden font-label-sm text-label-sm text-error pt-xs" id="email-error">Please enter a valid business email.</p>
+</div>
+<!-- Password Input -->
+<div class="space-y-xs group">
+<label class="font-label-md text-label-md text-on-surface-variant group-focus-within:text-primary transition-colors" for="password">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">lock</span>
+<input class="w-full h-12 pl-11 pr-11 bg-transparent border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary input-halo transition-all outline-none" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface transition-colors" id="toggle-password" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface">Remember me</span>
+</label>
+<a class="font-label-md text-label-md text-primary hover:underline transition-all" href="#">Forgot password?</a>
+</div>
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:shadow-lg active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-sm group" id="submit-btn" type="submit">
+<span>Sign In</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<p class="mt-2xl text-center font-body-sm text-body-sm text-on-surface-variant">
+                    Don't have an account? <a class="text-primary font-label-md hover:underline" href="#">Contact Sales</a>
+</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-md px-margin-mobile md:px-margin-desktop border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 SupportMind AI. Enterprise Intelligence.</p>
+<div class="flex gap-lg">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors underline" href="#">API Documentation</a>
+</div>
+</footer>
+<script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeThumb = document.getElementById('theme-thumb');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = html.classList.toggle('dark');
+            
+            // Animate Toggle
+            if (isDark) {
+                themeThumb.style.transform = 'translateX(24px) rotate(360deg)';
+                themeIcon.textContent = 'dark_mode';
+            } else {
+                themeThumb.style.transform = 'translateX(0px) rotate(0deg)';
+                themeIcon.textContent = 'light_mode';
+            }
+        });
+
+        // Password Visibility Toggle
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            togglePassword.querySelector('.material-symbols-outlined').textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+
+        // Form Submission and Validation Animation
+        const loginForm = document.getElementById('login-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simple validation feedback
+            if (!emailInput.value.includes('@')) {
+                emailInput.classList.add('border-error');
+                emailError.classList.remove('hidden');
+                // Shake animation
+                loginForm.classList.add('animate-shake');
+                setTimeout(() => loginForm.classList.remove('animate-shake'), 500);
+                return;
+            } else {
+                emailInput.classList.remove('border-error');
+                emailError.classList.add('hidden');
+            }
+
+            // Loading State Animation
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <div class="w-5 h-5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></div>
+                <span>Verifying...</span>
+            `;
+
+            setTimeout(() => {
+                submitBtn.innerHTML = `
+                    <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    <span>Access Granted</span>
+                `;
+                submitBtn.classList.remove('bg-primary');
+                submitBtn.classList.add('bg-primary-container', 'text-on-primary-container');
+                
+                // Redirect simulation
+                setTimeout(() => {
+                    console.log("Redirecting to dashboard...");
+                }, 1000);
+            }, 2000);
+        });
+
+        // Custom Shake Animation Utility
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-4px); }
+                75% { transform: translateX(4px); }
+            }
+            .animate-shake {
+                animation: shake 0.2s cubic-bezier(.36,.07,.19,.97) both;
+                transform: translate3d(0, 0, 0);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body></html>

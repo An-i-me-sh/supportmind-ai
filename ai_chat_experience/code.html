@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SupportMind AI - Chat Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@400;500&family=Geist:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#101b30",
+                      "surface-container-highest": "#d7e2ff",
+                      "inverse-primary": "#59dda9",
+                      "inverse-on-surface": "#edf0ff",
+                      "on-surface-variant": "#3d4a42",
+                      "secondary-fixed": "#b2ebff",
+                      "on-tertiary-fixed": "#052100",
+                      "surface-bright": "#f9f9ff",
+                      "outline": "#6d7a72",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#18697e",
+                      "primary-container": "#00a878",
+                      "outline-variant": "#bccac0",
+                      "on-primary-fixed-variant": "#005138",
+                      "tertiary": "#206d00",
+                      "primary": "#006c4c",
+                      "on-background": "#101b30",
+                      "tertiary-container": "#36aa00",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#78fac3",
+                      "primary-fixed-dim": "#59dda9",
+                      "on-primary-fixed": "#002114",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#263046",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#d7e2ff",
+                      "error": "#ba1a1a",
+                      "background": "#f9f9ff",
+                      "tertiary-fixed": "#84fe58",
+                      "secondary-fixed-dim": "#8bd1e8",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f9f9ff",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f1f3ff",
+                      "surface-tint": "#006c4c",
+                      "on-tertiary-fixed-variant": "#165200",
+                      "on-tertiary-container": "#0b3500",
+                      "tertiary-fixed-dim": "#69e03e",
+                      "surface-container": "#e8edff",
+                      "on-secondary-fixed": "#001f27",
+                      "secondary-container": "#a1e7ff",
+                      "surface-container-high": "#e0e8ff",
+                      "on-primary-container": "#003422",
+                      "secondary": "#13677b",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "container-max": "1440px",
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "base": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "2xl": "48px",
+                      "margin-desktop": "40px",
+                      "xl": "32px",
+                      "3xl": "64px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Geist"],
+                      "body-sm": ["Inter"],
+                      "code": ["Geist"],
+                      "display": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "body-md": ["Inter"],
+                      "label-md": ["Geist"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "code": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .chat-container::-webkit-scrollbar { width: 6px; }
+        .chat-container::-webkit-scrollbar-track { background: transparent; }
+        .chat-container::-webkit-scrollbar-thumb { background: #bccac0; border-radius: 10px; }
+        .glass { backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.7); }
+        .typing-dot { animation: typing 1.4s infinite ease-in-out; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-4px); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container/30 overflow-hidden">
+<!-- Navigation Drawer (SideNav) -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface border-r border-outline-variant flex flex-col py-lg gap-sm z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SupportMind AI</h1>
+</div>
+<nav class="flex-1 overflow-y-auto px-md space-y-xs">
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-primary font-bold bg-primary-container/10 transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label-md text-label-md">AI Chat</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Documents</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Knowledge Base</span>
+</a>
+<div class="pt-lg pb-sm px-md">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider">System</span>
+</div>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-md border-t border-outline-variant">
+<div class="flex items-center gap-md p-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">John Doe</span>
+<span class="text-label-sm font-label-sm text-outline">Pro Plan</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] h-screen flex flex-col relative">
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-[280px] h-16 bg-surface/80 backdrop-blur-md flex items-center justify-between px-margin-desktop z-40 border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm bg-surface-container-low px-md py-xs rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="smart_toy">smart_toy</span>
+<select class="bg-transparent border-none focus:ring-0 font-label-md text-label-md text-on-surface cursor-pointer">
+<option>SupportMind-v4-Pro</option>
+<option>GPT-4o Integration</option>
+<option>Claude 3.5 Sonnet</option>
+</select>
+</div>
+<div class="flex items-center gap-sm text-outline">
+<span class="material-symbols-outlined text-[16px]" data-icon="speed">speed</span>
+<span class="text-label-sm font-label-sm">Latency: 240ms</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm hover:bg-surface-container-low rounded-full transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+<button class="p-sm hover:bg-surface-container-low rounded-full transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant mx-xs"></div>
+<button class="bg-primary text-on-primary px-lg py-xs rounded-full font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all">
+                    Profile
+                </button>
+</div>
+</header>
+<!-- Chat Area -->
+<section class="flex-1 mt-16 pb-[120px] overflow-y-auto chat-container bg-surface-container-low/30">
+<div class="max-w-4xl mx-auto px-margin-desktop py-xl space-y-xl">
+<!-- System Greeting / Info -->
+<div class="flex justify-center mb-2xl">
+<div class="bg-surface-container p-lg rounded-2xl border border-outline-variant max-w-lg text-center">
+<p class="text-label-md font-label-md text-on-surface-variant">Active Session: <span class="text-primary font-bold">Enterprise Intelligence Suite</span></p>
+<p class="text-body-sm font-body-sm text-outline mt-xs">All responses are grounded in your private document repository.</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-sm group">
+<div class="bg-primary text-on-primary p-lg rounded-2xl rounded-tr-none shadow-sm max-w-[80%]">
+<p class="text-body-md font-body-md">Can you analyze the Q3 customer churn report and identify the top 3 reasons customers are leaving, based on the last 500 support tickets?</p>
+</div>
+<span class="text-label-sm font-label-sm text-outline px-sm opacity-0 group-hover:opacity-100 transition-opacity">Just now</span>
+</div>
+<!-- AI Message (Streaming Content) -->
+<div class="flex flex-col items-start gap-sm group">
+<div class="flex items-center gap-md mb-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">SupportMind AI</span>
+<div class="flex items-center gap-xs px-sm py-[2px] bg-tertiary/10 rounded-full">
+<span class="material-symbols-outlined text-tertiary text-[12px]" data-icon="verified">verified</span>
+<span class="text-[10px] font-bold text-tertiary uppercase">Confidence: 98%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl rounded-tl-none shadow-sm max-w-[85%] space-y-md">
+<div class="text-body-md font-body-md text-on-surface space-y-sm">
+<p>I've analyzed the <strong>Q3 Churn Repository</strong> and cross-referenced it with 524 support tickets tagged as "Cancellation Request" or "Service Dissatisfaction".</p>
+<p>Here are the top 3 primary drivers identified:</p>
+<ol class="list-decimal ml-md space-y-sm">
+<li><strong>Integration Complexity (42%):</strong> New enterprise clients cited difficulty syncing their existing CRM data with our API v2.4.</li>
+<li><strong>Response Latency (28%):</strong> High-tier accounts reported an average wait time of >4 hours during the August peak.</li>
+<li><strong>Feature Discovery (15%):</strong> Users were unaware of the "Auto-Automation" toolkit, leading to perceived value gaps.</li>
+</ol>
+</div>
+<!-- Sources -->
+<div class="pt-md border-t border-outline-variant">
+<span class="text-label-sm font-label-sm text-outline flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="source">source</span>
+                                SOURCES & CITATIONS
+                            </span>
+<div class="flex flex-wrap gap-sm">
+<div class="bg-surface-container px-sm py-xs rounded border border-outline-variant flex items-center gap-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-[10px] bg-primary/20 text-primary px-1 rounded font-bold">1</span>
+<span class="text-label-sm font-label-sm">Q3_Churn_Report.pdf</span>
+</div>
+<div class="bg-surface-container px-sm py-xs rounded border border-outline-variant flex items-center gap-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-[10px] bg-primary/20 text-primary px-1 rounded font-bold">2</span>
+<span class="text-label-sm font-label-sm">Aug_Support_Metrics.csv</span>
+</div>
+</div>
+</div>
+<!-- Related Questions -->
+<div class="pt-sm">
+<p class="text-label-sm font-label-sm text-outline mb-sm italic">Suggested follow-ups:</p>
+<div class="flex flex-col gap-xs">
+<button class="text-left text-primary hover:underline text-body-sm font-medium flex items-center gap-sm group">
+<span class="material-symbols-outlined text-[16px]" data-icon="subdirectory_arrow_right">subdirectory_arrow_right</span>
+                                    How can we improve the CRM integration onboarding?
+                                </button>
+<button class="text-left text-primary hover:underline text-body-sm font-medium flex items-center gap-sm group">
+<span class="material-symbols-outlined text-[16px]" data-icon="subdirectory_arrow_right">subdirectory_arrow_right</span>
+                                    Show me the trend of latency complaints over the last 3 months.
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Typing Indicator (Hidden by default, shown for "streaming") -->
+<div class="flex items-center gap-md" id="typing-indicator">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="bg-surface-container-low px-md py-sm rounded-full flex gap-xs">
+<span class="w-2 h-2 bg-primary rounded-full typing-dot"></span>
+<span class="w-2 h-2 bg-primary rounded-full typing-dot"></span>
+<span class="w-2 h-2 bg-primary rounded-full typing-dot"></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Input Area -->
+<footer class="fixed bottom-0 right-0 left-[280px] bg-surface-container-lowest/80 backdrop-blur-xl border-t border-outline-variant p-lg z-40">
+<div class="max-w-4xl mx-auto flex items-end gap-md">
+<div class="flex-1 bg-surface border border-outline-variant rounded-2xl p-sm shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<div class="flex items-center gap-xs px-sm pb-xs">
+<button class="p-xs text-outline hover:text-primary transition-colors rounded-lg hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<button class="p-xs text-outline hover:text-primary transition-colors rounded-lg hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="image">image</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant mx-xs"></div>
+<span class="text-label-sm font-label-sm text-outline">Search knowledge base...</span>
+</div>
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-body-md font-body-md px-md resize-none placeholder:text-outline/50" placeholder="Ask SupportMind anything..." rows="1"></textarea>
+<div class="flex items-center justify-between mt-sm px-sm pt-xs">
+<div class="flex gap-md">
+<button class="text-outline hover:text-primary transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="mic">mic</span>
+<span class="text-label-sm font-label-sm">Voice</span>
+</button>
+</div>
+<button class="bg-primary text-on-primary w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-4xl mx-auto flex justify-between items-center mt-md text-label-sm font-label-sm text-outline px-md">
+<p>© 2024 SupportMind AI. Enterprise Intelligence.</p>
+<div class="flex gap-lg">
+<a class="hover:text-primary underline transition-opacity" href="#">Privacy Policy</a>
+<a class="hover:text-primary underline transition-opacity" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-32 right-12 w-14 h-14 rounded-full bg-primary-container text-on-primary-container shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 z-50 group">
+<span class="material-symbols-outlined text-[28px]" data-icon="bolt">bolt</span>
+<div class="absolute right-full mr-md bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-lg whitespace-nowrap text-label-md font-label-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                AI Actions Menu
+            </div>
+</button>
+</main>
+<script>
+        // Simple auto-resize for textarea
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('input', () => {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        });
+
+        // Theme Toggle Logic (Visual only for now)
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Simulating Micro-interactions for hovering sources
+        const sources = document.querySelectorAll('.bg-surface-container');
+        sources.forEach(source => {
+            source.addEventListener('mouseenter', () => {
+                source.classList.add('scale-105');
+            });
+            source.addEventListener('mouseleave', () => {
+                source.classList.remove('scale-105');
+            });
+        });
+    </script>
+</body></html>
