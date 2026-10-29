@@ -23,6 +23,18 @@ if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
     engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    try:
+        from sqlalchemy import event
+        from pgvector.psycopg import register_vector
+
+        @event.listens_for(engine, "connect")
+        def on_connect(dbapi_connection, connection_record):
+            try:
+                register_vector(dbapi_connection)
+            except Exception as e:
+                logger.warning(f"Note on pgvector registration: {e}")
+    except Exception as e:
+        logger.warning(f"pgvector event setup note: {e}")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

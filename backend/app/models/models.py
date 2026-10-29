@@ -16,9 +16,26 @@ class VectorType(TypeDecorator):
 
     def load_dialect_impl(self, dialect):
         if dialect.name == "postgresql":
-            from pgvector.sqlalchemy import Vector
-            return dialect.type_descriptor(Vector(384))
+            try:
+                from pgvector.sqlalchemy import Vector
+                return dialect.type_descriptor(Vector(384))
+            except Exception:
+                return dialect.type_descriptor(JSON())
         return dialect.type_descriptor(JSON())
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if hasattr(value, "tolist"):
+            return value.tolist()
+        return list(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        if hasattr(value, "tolist"):
+            return value.tolist()
+        return value
 
 class User(Base):
     __tablename__ = "users"

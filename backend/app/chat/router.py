@@ -134,16 +134,21 @@ async def chat_interaction(
     results = []
 
     if dialect_name == "postgresql":
-        raw_results = db.query(
-            DocumentChunk,
-            (1 - DocumentChunk.embedding.cosine_distance(query_embedding)).label("similarity")
-        ).filter(DocumentChunk.embedding != None)\
-         .order_by(DocumentChunk.embedding.cosine_distance(query_embedding))\
-         .limit(5)\
-         .all()
-        results = [(chunk, float(score)) for chunk, score in raw_results]
-    else:
-        # Fallback for SQLite / local testing
+        try:
+            raw_results = db.query(
+                DocumentChunk,
+                (1 - DocumentChunk.embedding.cosine_distance(query_embedding)).label("similarity")
+            ).filter(DocumentChunk.embedding != None)\
+             .order_by(DocumentChunk.embedding.cosine_distance(query_embedding))\
+             .limit(5)\
+             .all()
+            results = [(chunk, float(score)) for chunk, score in raw_results]
+        except Exception as pg_err:
+            logger.warning(f"PostgreSQL native vector search failed ({pg_err}), falling back to hybrid scorer.")
+            results = []
+
+    if not results:
+        # Fallback for SQLite or when native vector query falls back
         all_chunks = db.query(DocumentChunk).all()
         scored_chunks = []
         for chunk in all_chunks:

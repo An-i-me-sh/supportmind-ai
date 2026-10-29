@@ -66,41 +66,54 @@ class DocumentService:
 
     @classmethod
     def process_document_background(cls, db_session_factory, document_id: str, file_path: str, file_type: str):
-        db: Session = db_session_factory()
         doc_id_str = str(document_id)
-        document = db.query(Document).filter(Document.id == doc_id_str).first()
-        if not document:
-            logger.error(f"Document {doc_id_str} not found in background processor.")
-            db.close()
-            return
+        logger.info(f"Background worker started for document ID: {doc_id_str}")
 
         try:
             text = cls.extract_text(file_path, file_type)
-            if not text.strip():
-                raise ValueError("No text could be extracted from the file.")
+            if not text or not text.strip():
+                raise ValueError("No readable text could be extracted from this document.")
 
             chunks = cls.chunk_text(text)
-            
-            for idx, chunk_content in enumerate(chunks):
-                embedding = AIService.get_embedding(chunk_content)
-                
-                chunk_obj = DocumentChunk(
-                    document_id=str(document.id),
-                    content=chunk_content,
-                    embedding=embedding,
-                    chunk_index=idx,
-                    metadata_json={"filename": document.filename, "chunk_index": idx}
-                )
-                db.add(chunk_obj)
-            
-            document.status = "completed"
-            db.commit()
-            logger.info(f"Successfully processed and embedded document {document.filename} ({len(chunks)} chunks)")
+            logger.info(f"Extracted {len(chunks)} chunks from {file_path}. Generating embeddings...")
+
+            with db_session_factory() as db:
+                document = db.query(Document).filter(Document.id == doc_id_str).first()
+                if not document:
+                    logger.error(f"Document {doc_id_str} not found in database.")
+                    return
+
+                for idx, chunk_content in enumerate(chunks):
+                    try:
+                        embedding = AIService.get_embedding(chunk_content)
+                    except Exception as emb_err:
+                        logger.warning(f"Embedding failed for chunk {idx}: {emb_err}. Using fallback.")
+                        embedding = AIService.fallback_embedding(chunk_content)
+
+                    if hasattr(embedding, "tolist"):
+                        embedding = embedding.tolist()
+
+                    chunk_obj = DocumentChunk(
+                        document_id=str(document.id),
+                        content=chunk_content,
+                        embedding=embedding,
+                        chunk_index=idx,
+                        metadata_json={"filename": document.filename, "chunk_index": idx}
+                    )
+                    db.add(chunk_obj)
+
+                document.status = "completed"
+                db.commit()
+                logger.info(f"Successfully indexed document {document.filename} with {len(chunks)} chunks.")
 
         except Exception as e:
-            db.rollback()
-            document.status = "error"
-            db.commit()
-            logger.exception(f"Error processing document {document.filename}: {e}")
-        finally:
-            db.close()
+            logger.exception(f"Fatal error processing document {doc_id_str}: {e}")
+            try:
+                with db_session_factory() as err_db:
+                    err_doc = err_db.query(Document).filter(Document.id == doc_id_str).first()
+                    if err_doc:
+                        err_doc.status = "error"
+                        err_db.commit()
+                        logger.info(f"Marked document {doc_id_str} as error in database.")
+            except Exception as update_err:
+                logger.error(f"Could not update document status to error: {update_err}")

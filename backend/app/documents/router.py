@@ -44,6 +44,7 @@ async def upload_document(
 
     total_size = 0
     try:
+        os.makedirs(os.path.dirname(os.path.abspath(file_path)), exist_ok=True)
         with open(file_path, "wb") as buffer:
             while True:
                 chunk = await file.read(1024 * 64)

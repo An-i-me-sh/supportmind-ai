@@ -12,6 +12,12 @@ _embedding_model: Optional[Any] = None
 HAS_SENTENCE_TRANSFORMERS = False
 
 try:
+    import torch
+    torch.set_num_threads(1)
+except Exception:
+    pass
+
+try:
     from sentence_transformers import SentenceTransformer
     HAS_SENTENCE_TRANSFORMERS = True
 except ImportError:
